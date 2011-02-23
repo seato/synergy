@@ -1,0 +1,57 @@
+/*
+ * Title:  synergy
+ * Author:  Richard Thai
+ * Created:  2/1/2011
+ * Modified:  2/22/2011
+ *
+ * Prerequisite:  IMPORTANT!  The IXM's that download this code MUST have an
+ * integer ID programmed in beforehand.  Use the IXM BIOS to set the board
+ * NAME ((n=NAME) according to the help menu).  Note that the input is stored
+ * on the boards in base-36 so that it can accept letters in addition to
+ * integers (26 letters + 10 integers = 36 symbols).  You don't need an
+ * 'integer' ID, but it's certainly a good idea since the IXM's are typically
+ * shipped with a unique 8 digit identifying sticker.
+ * Info on accessing the BIOS can be found in the Antipasto Hardware Wiki on
+ * http://antipastohw.pbworks.com/w/page/30205779/IXM-Bios-Tutorial.
+ *
+ * Description:  This is a demonstration of the performance qualities of the IXM.
+ * Each board performs a portion of a larger calculation (finding the exact value
+ * of PI).  To divide up this calculation, all boards are aware of the number of
+ * active boards available as well as an order to determine what piece each board
+ * does.  Each board then calculates and shares its results with all other boards
+ * per round.  A blue LED lights up to signify that it is currently processing; a
+ * blue + green combo signifies that the boards are increasing in accuracy while
+ * a blue + red combo signifies a decrease in accuracy.  Once an IXM hits its
+ * accuracy goal, it will light its green LED and continue to generate points for
+ * other boards in the grid if they're not complete with their calculations.
+ *
+ * Button Function:
+ * None.
+ *
+ * Terminal Commands:
+ * >> x         - force a reboot to all IXM's in the grid
+ * >> t         - request to stop sending heart-beat packets (starts with "r"
+ *                followed by a combination of numbers and commas) and to start
+ *                displaying the local IXM's internal table which will update on
+ *                an interval
+ * >> dA.B        - request to initiate a calculation for the (A.B)_th degree of
+ *                accuracy.  The result per round for PI (points IN circle) is
+ *                broadcast the moment it is generated.  Replace the 'A.B' with
+ *                the (A.B)_th degree of accuracy of pi to calculate, for example:
+ *                d95.00 is a request to calculate PI that is at least the 95.00%
+ *                accurate.  It is necessary to type the degree of accuracy with a
+ *                integer followed by a decimal.  There is also a limit programmed
+ *                within the boards as to how high of a degree of accuracy of PI
+ *                they can take which can be found within the header file as
+ *                "DOA_THRESHOLD".  Change this for endless calculating!
+ *
+ * Notes:
+ * The boards do not rely on a slave/master setup, meaning that every internal
+ * could potentially be different.  A weakness is that IXM(s) in the grid could
+ * have discordant data.  However, this setup also allows IXM's to have no single
+ * point of failure should an arbitrary board encounter a data/network fault
+ * (assuming grid with redundant networking paths).
+ * Every additional board increases the total computation potential per round, thus
+ * reducing the expected time to reach a projected degree of accuracy (but
+ * probability likes to screw around from time to time).
+ */
